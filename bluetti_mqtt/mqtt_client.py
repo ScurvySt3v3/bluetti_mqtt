@@ -526,7 +526,7 @@ class MQTTClient:
         def payload(id: str, device: BluettiDevice, field: MqttFieldConfig) -> str:
             ha_id = id if not field.id_override else field.id_override
             payload_dict = {
-                'state_topic': f'bluetti/state/{device.type}-{device.sn}/{id}',
+                'state_topic': f'bluetti/state/eb3a{device.sn}/{id}',
                 'device': {
                     'identifiers': [
                         f'{device.sn}'
@@ -539,7 +539,7 @@ class MQTTClient:
                 'object_id': f'{device.type}_{ha_id}',
             }
             if field.setter:
-                payload_dict['command_topic'] = f'bluetti/command/{device.type}-{device.sn}/{id}'
+                payload_dict['command_topic'] = f'bluetti/command/eb3a{device.sn}/{id}'
             payload_dict.update(field.home_assistant_extra)
 
             return json.dumps(payload_dict, separators=(',', ':'))
@@ -596,7 +596,7 @@ class MQTTClient:
 
     async def _handle_message(self, client: Client, msg: ParserMessage):
         logging.debug(f'Got a message from {msg.device}: {msg.parsed}')
-        topic_prefix = f'bluetti/state/{msg.device.type}-{msg.device.sn}/'
+        topic_prefix = f'bluetti/state/eb3a{msg.device.sn}/'
 
         # Publish normal fields
         for name, value in msg.parsed.items():
